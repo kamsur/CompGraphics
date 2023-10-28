@@ -89,13 +89,13 @@ function drawSmoothCircle(canvas) {
             }
         else if(d==Math.pow(45,2)){
             img.data[i] = 0;
-            img.data[i + 1] = 191;
+            img.data[i + 1] = 192;
             img.data[i + 2] = 0;
             img.data[i + 3] = 255;
             }
         else if(d==Math.pow(55,2)){
             img.data[i] = 127;
-            img.data[i + 1] = 191;
+            img.data[i + 1] = 192;
             img.data[i + 2] = 127;
             img.data[i + 3] = 255;
             }
