@@ -62,6 +62,25 @@ function bresenham(image, line) {
     let x1 = Math.floor(line.endPoint.x);
     let y1 = Math.floor(line.endPoint.y);
 
+    if(x0>x1){
+        x0 += x1;
+        x1 = x0-x1;
+        x0 -= x1;
+        y0 += y1;
+        y1 = y0-y1;
+        y0 -= y1;
+    }
+    // let m=(y1-y0)/(x1-x0);
+    // if(Math.abs(m)>1){
+    //     x0 += y0;
+    //     y0 = x0-y0;
+    //     x0 -= y0;
+    //     x1 += y1;
+    //     y1 = x1-y1;
+    //     x1 -= y1;
+    //     m=(y1-y0)/(x1-x0);
+    // }
+
     // TODO 2.1     Write code to draw a line
     //              between the start point and
     //              the end point. To make things
@@ -69,23 +88,35 @@ function bresenham(image, line) {
     //              on what to do next: 
 
     // compute deltas and update directions
+    const delX=x1-x0;
+    //const delY=Math.abs(y1-y0);
+    const delY=y1-y0;
+    let D=delX-2*delY;
+    const delDE=-2*delY;
+    const delDNE=2*(delX-delY);
 
 
 
     // set initial coordinates
+    let y=y0;
+    //const y_step=-1?m<0:1;
+    const y_step=1;
 
 
-
-    // start loop to set nPixels 
-    let nPixels = 0; // think about how many pixels need to be set - zero is not correct ;)
-    for (let i = 0; i < nPixels; ++i) {
+    // start loop to set nPixels
+    //const nPixels = 2*Math.sqrt(Math.pow(delx,2)+Math.pow(dely,2)); // think about how many pixels need to be set - zero is not correct ;)
+    for (let x = x0; x <= x1; x++) {
         // set pixel using the helper function setPixelS()
-
+        setPixelS(image, new Point(x,y), line.color, pixelScale);
 
         // update error
-
-
         // update coordinates depending on the error
+        if(D<0){
+            y+=y_step;
+            D=D+delDNE;
+        }
+        else
+            D=D+delDE;
 
 
     }
