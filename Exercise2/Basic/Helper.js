@@ -7,10 +7,11 @@ function Point(x, y) {
 }
 
 // create rgb color triple
-function Color(r, g, b) {
+function Color(r, g, b, a) {
     this.r = r;
     this.g = g;
     this.b = b;
+    this.a = a;
 }
 
 // create a line with two points and a color
@@ -46,7 +47,7 @@ function setPixelS(image, pixel, color, pixelScale) {
                     image.data[index + 0] = color.r; // R
                     image.data[index + 1] = color.g; // G
                     image.data[index + 2] = color.b; // B
-                    image.data[index + 3] = 255; // A
+                    image.data[index + 3] = color.a; // A
                 }
             }
         }
