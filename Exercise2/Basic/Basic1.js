@@ -62,14 +62,6 @@ function bresenham(image, line) {
     let x1 = Math.floor(line.endPoint.x);
     let y1 = Math.floor(line.endPoint.y);
 
-    if(x0>x1){
-        x0 += x1;
-        x1 = x0-x1;
-        x0 -= x1;
-        y0 += y1;
-        y1 = y0-y1;
-        y0 -= y1;
-    }
     let m=(y1-y0)/(x1-x0);
     if(Math.abs(m)>1){
         x0 += y0;
@@ -78,7 +70,14 @@ function bresenham(image, line) {
         x1 += y1;
         y1 = x1-y1;
         x1 -= y1;
-        //m=(y1-y0)/(x1-x0);
+    }
+    if(x0>x1){
+        x0 += x1;
+        x1 = x0-x1;
+        x0 -= x1;
+        y0 += y1;
+        y1 = y0-y1;
+        y0 -= y1;
     }
 
     // TODO 2.1     Write code to draw a line
@@ -90,7 +89,6 @@ function bresenham(image, line) {
     // compute deltas and update directions
     const delX=x1-x0;
     const delY=Math.abs(y1-y0);
-    //const delY=y1-y0;
     let D=delX-2*delY;
     const delDE=-2*delY;
     const delDNE=2*(delX-delY);
