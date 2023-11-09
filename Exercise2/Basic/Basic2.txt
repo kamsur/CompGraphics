@@ -1,0 +1,6 @@
+Pros:
+1. Easy to implement and works for all shapes.
+2. Computes only for pixels within shape.
+Cons:
+1. Recursive algorithm, can require large stack, may fail for very large polygons.
+2. A lot of knowledge required to choose the initial seed pixel.
