@@ -10,9 +10,12 @@ function webGLStart(canvas) {
     let c = [0.3, 0.2];
     let r = 0.7;
     let slices = 100;
+    let theta=2*Math.PI/slices;
     
     let vertices = [];
     let indices = [];
+    vertices.push(c[0]);
+    vertices.push(c[1]);
 
     // TODO 3.1)	Replace the following code so that
     //              the vertices and indices to not describe
@@ -20,17 +23,19 @@ function webGLStart(canvas) {
     //              c with radius r. Use triangles to describe 
     //              the circle's geometry. The number of
     //              triangles is stored in the variable slices.
-
-    vertices.push(-.5);
-    vertices.push(-.5);
-    vertices.push(.5);
-    vertices.push(-.5);
-    vertices.push(0);
-    vertices.push(0.5);
-
+    for(let x=0;x<slices;x++){
+        let a=theta*x;
+        vertices.push(c[0]+r*Math.cos(a));
+        vertices.push(c[1]+r*Math.sin(a));
+    }
+    for(let x=1;x<slices;x++){
+        indices.push(0);
+        indices.push(x);
+        indices.push(x+1);
+    }
     indices.push(0);
+    indices.push(slices);
     indices.push(1);
-    indices.push(2);
 
     
 
