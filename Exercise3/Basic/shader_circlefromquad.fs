@@ -13,9 +13,7 @@ void main(void)
 	//				the range of [-1,1]. Discard all fragments outside the circle 
 	//				with the radius r. Smooth the circle's edge within 
 	//				[r-smoothMargin, r] by computing an appropriate alpha value.
-	// gl_FragCoord.xy=(gl_FragCoord.xy)*2.0-1.0;
-	// vec v=vec2(gl_FragCoord.x,gl_FragCoord.y);
-vec2 v = vec2( (gl_FragCoord.x / canvas_size[0] - 0.5) * 2.0, (gl_FragCoord.y / canvas_size[1] - 0.5) * 2.0);
+	vec2 v=(gl_FragCoord.xy/canvasSize.xy)*2.0-1.0;
 	if(length(v)>r){
 		discard;
 	}
