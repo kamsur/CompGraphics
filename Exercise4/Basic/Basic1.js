@@ -31,7 +31,7 @@ function Basic1_1(canvas) {
         //              is the x component and point2D[1] is the z 
         //              component (Hint: have a look at the bottom left 
         //              of the output image, there you will see the x-z axis).
-        return 0.0;
+        return point2D[0];
     }
 
     ////////////////////////////////////
@@ -118,7 +118,11 @@ function Basic1_2(canvas) {
         //              everything to camera space. The variable 'imagePlane'
         //              gives you the z value of the image plane (You also have 
         //              to transform it to camera space coordinates.).
-        return 0.0;
+        let x = point2D[0] - eye[0];
+        let z = point2D[1] - eye[1];
+        let imgPlane=imagePlane-eye[1];
+        let scaleFactor = imgPlane/z;
+        return x*scaleFactor;
         
     }
 
@@ -210,16 +214,17 @@ mat3.perspective = function (out, fovy, near, far) {
     //              into the negative view direction.
     //              Use column-major order!
 
-    out[0] = 0;
+    let t=near*Math.tan(fovy/2);
+    out[0] = 2*near/(2*t);
     out[1] = 0;
     out[2] = 0;
 
     out[3] = 0;
-    out[4] = 0;
-    out[5] = 0;
+    out[4] = -(far+near)/(far-near);
+    out[5] = -1;
 
     out[6] = 0;
-    out[7] = 0;
+    out[7] = -2*far*near/(far-near);
     out[8] = 0;
 
     return out;
@@ -268,15 +273,38 @@ class Camera {
         negViewDir[0] = this.eye[0] - this.lookAtPoint[0];
         negViewDir[1] = this.eye[1] - this.lookAtPoint[1];
         vec2.normalize(negViewDir, negViewDir);
+        let t=vec2.create();
+        t[0]=1.0;
+        t[1]=0;
+        let u=vec2.create();
+        vec2.cross(u,t,negViewDir);
+        let v=vec2.create();
+        vec2.cross(v,negViewDir,u);
+
 
         // TODO 4.1c)   Set up the camera matrix and the inverse camera matrix.
         //              The cameraMatrix transforms from world space to camera space.
         //              The cameraMatrixInverse transforms from camera space to world space.
         //              You can use gl-matrix.js where necessary. Use column-major order!
         //              It can be handy to compute the inverted matrix first.
+	    this.cameraMatrix[0] = v[0];
+        this.cameraMatrix[1] = negViewDir[0];
+        this.cameraMatrix[2] = 0;
+
+        this.cameraMatrix[3] = v[1];
+        this.cameraMatrix[4] = negViewDir[1];
+        this.cameraMatrix[5] = 0;
+
+        this.cameraMatrix[6] = -(v[0]*this.eye[0]+v[1]*this.eye[1]);
+        this.cameraMatrix[7] = -(negViewDir[0]*this.eye[0]+negViewDir[1]*this.eye[1]);
+        this.cameraMatrix[8] = 1.0;
+
+        mat3.invert(this.cameraMatrixInverse,this.cameraMatrix);
 
         // TODO 4.1c)   Set up the projection matrix using mat3.perspective(...), 
         //              which has to be implemented!
+        mat3.perspective(this.projectionMatrix, this.fovy, this.near, this.far);
+
 
     }
 
@@ -293,8 +321,17 @@ class Camera {
         //              Don't forget to dehomogenize the projected point 
         //              before returning it! You can use gl-matrix.js where
         //              necessary.
+        let point=vec3.create();
+        point[0]=point2D[0];
+        point[1]=point2D[1];
+        point[2]=1.0;
+        let viewMatrix=mat3.create();
+        mat3.multiply(viewMatrix,this.projectionMatrix,this.cameraMatrix);
+        vec3.transformMat3(point,point,viewMatrix);
+        // vec3.transformMat3(point,point,this.cameraMatrix);
+        // vec3.transformMat3(point,point,this.projectionMatrix);
 
-        return [0.0, 0.0];
+        return [point[0]/point[2], point[1]/point[2]];
     }
 
     render(context) {

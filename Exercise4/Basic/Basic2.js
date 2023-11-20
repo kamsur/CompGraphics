@@ -20,6 +20,29 @@ mat4.perspective = function (out, fovy, near, far) {
     // out[0] = ?
     // out[1] = ?
     // ...
+    let r=near*Math.tan(fovy/2);
+    let t=near*Math.tan(fovy/2);
+    out[0] = 2*near/(2*r);
+    out[1] = 0;
+    out[2] = 0;
+    out[3]=0;
+
+    out[4] = 0;
+    out[5] = 2*near/(2*t);
+    out[6] = 0;
+    out[7]=0;
+
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = -(far+near)/(far-near);
+    out[11] = -1;
+
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = -2*far*near/(far-near);
+    out[15] = 0;
+
+    return out;
 
 
 
@@ -98,7 +121,15 @@ class Camera3D {
         //              the camera coordinate system. Use the  
         //              notation from the lecture.
         //              Again, be careful to use column-major notation.
-
+        this.w = vec3.create();
+        this.w[0] = this.eye[0] - this.lookAtPoint[0];
+        this.w[1] = this.eye[1] - this.lookAtPoint[1];
+        this.w[2] = this.eye[2] - this.lookAtPoint[2];
+        vec3.normalize(this.w, this.w);
+        this.u=vec3.create();
+        vec3.cross(this.u,this.upVector,this.w);
+        this.v=vec3.create();
+        vec3.cross(this.v,this.w,this.u);
         // this.w = ?
         // this.u = ?
         // this.v = ? 
@@ -107,6 +138,25 @@ class Camera3D {
 
 
         // this.cameraMatrix = ?
+        this.cameraMatrix[0] = this.u[0];
+        this.cameraMatrix[1] = this.v[0];
+        this.cameraMatrix[2] = this.w[0];
+        this.cameraMatrix[3] = 0;
+
+        this.cameraMatrix[4] = this.u[1];
+        this.cameraMatrix[5] = this.v[1];
+        this.cameraMatrix[6] = this.w[1];
+        this.cameraMatrix[7] = 0;
+
+        this.cameraMatrix[8] = this.u[2];
+        this.cameraMatrix[9] = this.v[2];
+        this.cameraMatrix[10] = this.w[2];
+        this.cameraMatrix[11] = 0;
+
+        this.cameraMatrix[12] = -(this.u[0]*this.eye[0]+this.u[1]*this.eye[1]+this.u[2]*this.eye[2]);
+        this.cameraMatrix[13] = -(this.v[0]*this.eye[0]+this.v[1]*this.eye[1]+this.v[2]*this.eye[2]);
+        this.cameraMatrix[14] = -(this.w[0]*this.eye[0]+this.w[1]*this.eye[1]+this.w[2]*this.eye[2]);
+        this.cameraMatrix[15] = 1.0;
 
 
 
