@@ -22,9 +22,18 @@
 
     // 1. Set up a color as a return value, and initialize it with the 
     //    desired background color.
+    let color=[255, 255, 255];
 
     // 2. Loop over the four circle images in the correct order to blend
     //    them one after another.
+    for(let circle=0;circle<4;circle++){
+        let alpha=alphas[circle];
+        if(images[circle][index+3]!=0){
+            for(let channel=0;channel<3;channel++){
+                color[channel]=(1-alpha)*color[channel]+alpha*images[circle][index+channel];
+            }
+        }
+    }
 
         // 3. Compute the resulting alpha value for the current pixel.
         //    If it is a background pixel of the current image (denoted
@@ -36,7 +45,7 @@
         //    three color channels.
 
     // 5. Return the resulting color. Replace the following dummy line.
-    return [255, 255, 255];
+    return color;
 }
 
 
