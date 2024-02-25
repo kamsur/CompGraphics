@@ -1,5 +1,4 @@
 
-
 function arrow(context, fromx, fromy, tox, toy) {
     // http://stuff.titus-c.ch/arrow.html
     let headlen = 10;   // length of head in pixels
@@ -300,6 +299,7 @@ class Camera {
         this.cameraMatrix[8] = 1.0;
 
         mat3.invert(this.cameraMatrixInverse,this.cameraMatrix);
+        mat3.fromValues()
 
         // TODO 4.1c)   Set up the projection matrix using mat3.perspective(...), 
         //              which has to be implemented!
